@@ -1,0 +1,15 @@
+{
+  "autoload": {
+    "psr-4": {
+      "Sepid\\": "inc/",
+      "Sepid\\Core\\": "inc/core"
+    }
+  },
+  "authors": [
+    {
+      "name": "Hamed Movasaqpoor",
+      "email": "hamed.movasaqpoor@gmail.com"
+    }
+  ],
+  "require": {}
+}
