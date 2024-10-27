@@ -2,53 +2,57 @@
 
 namespace Sepid;
 
+use Sepid\Core\Logger;
+
 class Firewall {
 
     private $wpdb;
     private $table_name;
     private $limit = 4; // Max attempts
-    private $time_frame = 60; // Time frame in seconds
+    private $time_frame = 60000; // Time frame in seconds
     private $block_time = 15 * 60; // Block for 15 minutes (in seconds)
+    private $logger;
 
     public function __construct() {
         global $wpdb;
         $this->wpdb = $wpdb;
         $this->table_name = $wpdb->prefix . SEPID_LOGIN_IP__TABLE_KEY;
+        $this->logger = new Logger(); // Instantiate the Logger
     }
 
     public function check_ip($user_ip) {
-        $current_time = current_time('mysql', 1); // UTC time
+        $current_time = current_time('timestamp'); // Get current time as a timestamp
         $ip_record = $this->wpdb->get_row($this->wpdb->prepare("SELECT * FROM $this->table_name WHERE ips = %s", $user_ip));
 
-        // If IP is blocked, check if the block period has expired
-        if ($ip_record && $ip_record->blocked) {
-            $blocked_until = strtotime($ip_record->blocked_until);
-            if ($current_time < $blocked_until) {
-                return ['success' => false, 'message' => 'Your IP is temporarily blocked. Please try again later.'];
-            } else {
-                // Unblock the IP if the blocking period has expired
-                $this->unblock_ip($ip_record);
-                $ip_record = null; // Reset the record to allow further processing
-            }
-        }
+        if ($ip_record) {
+            if ($ip_record->blocked) {
+                $blocked_until = strtotime($ip_record->blocked_until);
 
-        // If no record exists, create one
-        if (!$ip_record) {
-            $this->create_ip_record($user_ip, $current_time);
+                if ($current_time < $blocked_until) {
+                    return ['success' => false, 'message' => 'به دلیل درخواست های زیاد موقتا دسترسی شما مسدود شده است.'];
+                } else {
+                    $this->unblock_ip($ip_record);
+                }
+            }
+        } else {
+            // If no record exists, create one
+            $this->create_ip_record($user_ip, date('Y-m-d H:i:s', $current_time));
             $ip_record = $this->wpdb->get_row($this->wpdb->prepare("SELECT * FROM $this->table_name WHERE ips = %s", $user_ip));
         }
 
         // Check if last attempt was within the time frame
-        $last_attempt_time = strtotime($ip_record->last_attempt);
-        if (($current_time - $last_attempt_time) <= $this->time_frame) {
+        $last_attempt_time = strtotime($ip_record->last_attempt); // Convert last attempt to timestamp
+
+        // Check if the time frame has passed
+        if (($current_time - $last_attempt_time) < $this->time_frame) {
             // If attempts exceed limit, block further requests
             if ($ip_record->send_count >= $this->limit) {
-                $this->block_ip($user_ip, $current_time);
-                return ['success' => false, 'message' => 'Too many requests. Your IP has been temporarily blocked.'];
+                $this->block_ip($user_ip, date('Y-m-d H:i:s', $current_time));
+                return ['success' => false, 'message' => 'تعداد درخواست های ارسالی از طرف شما زیاد است. مسدود می شوید.'];
             }
         } else {
-            // Reset the counter if the time frame has passed
-            $this->reset_attempts($user_ip, $current_time);
+            // Only reset attempts if the time frame has fully passed
+            $this->reset_attempts($user_ip, date('Y-m-d H:i:s', $current_time));
         }
 
         return ['success' => true, 'ip_record' => $ip_record];

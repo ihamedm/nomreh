@@ -3,6 +3,7 @@
 namespace Sepid\User;
 
 use Sepid\Sepid;
+use Sepid\Utilities\Helpers;
 
 class Login {
 
@@ -16,9 +17,13 @@ class Login {
         $phone = isset($_POST['phone']) ? sanitize_text_field($_POST['phone']) : '';
         $otp_code = isset($_POST['otp_code']) ? sanitize_text_field($_POST['otp_code']) : '';
 
+        // Convert Persian numbers to standard numbers
+        $phone = Helpers::fix_fa_nums($phone);
+        $otp_code = Helpers::fix_fa_nums($otp_code);
+
         // Ensure both the phone number and OTP code are provided
         if (empty($phone) || empty($otp_code)) {
-            wp_send_json_error(['message' => 'Phone number and OTP code are required.']);
+            wp_send_json_error(['message' => 'اطلاعات فرم به درستی وارد نشده است.']);
         }
 
         // Verify the OTP code
@@ -32,7 +37,7 @@ class Login {
             // If no user was found, tell js to show register form
             if (!$user) {
                 wp_send_json_success([
-                    'message' => 'New user detected.',
+                    'message' => 'شما کاربر جدید هستید. ثبت نام خود را تکمیل کنید.',
                     'is_new_user' => true
                 ]);
                 return;
@@ -48,10 +53,10 @@ class Login {
                 \Sepid\Otp::delete_otp_code($phone);
 
                 // Send success response
-                wp_send_json_success(['message' => 'Login successful.']);
+                wp_send_json_success(['message' => 'با موفقیت وارد شدید.']);
             } else {
                 // Send error if the user is not found
-                wp_send_json_error(['message' => 'User not found.']);
+                wp_send_json_error(['message' => 'کاربر پیدا نشد!']);
             }
         } else {
             // Send error if OTP verification failed

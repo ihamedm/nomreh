@@ -9,12 +9,22 @@ class ComposerStaticInit8d070178755c320c69f93ee4800660ef
     public static $prefixLengthsPsr4 = array (
         'S' => 
         array (
+            'Sepid\\Utilities\\' => 16,
+            'Sepid\\User\\' => 11,
             'Sepid\\Core\\' => 11,
             'Sepid\\' => 6,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'Sepid\\Utilities\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/inc/Utilities',
+        ),
+        'Sepid\\User\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/inc/User',
+        ),
         'Sepid\\Core\\' => 
         array (
             0 => __DIR__ . '/../..' . '/inc/core',

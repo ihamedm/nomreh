@@ -66,13 +66,12 @@ class Sepid{
         define('SEPID_PLUGIN_VERSION', self::$plugin_version);
         define('SEPID_PLUGIN_PATH', self::$plugin_path);
         define('SEPID_PLUGIN_URL', self::$plugin_url);
-        define('SEPID_DB_VERSION', '1.1');
+        define('SEPID_DB_VERSION', '1.3');
         define('SEPID_CRON_VERSION', '1.1');
         define('SEPID_DEVELOPMENT', true);
 
         // behsima token
         define('SEPID_KAVEHNEGAR_TOKEN', '4568316563693457526A776C6B6A387830372F6C362B5153446951787379524D');
-
 
         define('SEPID_LOGIN_CODE__TABLE_KEY', 'sepid_login_code');
         define('SEPID_LOGIN_IP__TABLE_KEY', 'sepid_login_ip');
@@ -83,7 +82,7 @@ class Sepid{
 
         // @todo get these data from option page
         define('SEPID_REDIRECT_URL', get_site_url());
-        define('SEPID_LOGIN_PAGE_SLUG', 'login-signup');
+        define('SEPID_LOGIN_PAGE_SLUG', 'my-account');
 
 
     }
@@ -127,7 +126,7 @@ class Sepid{
     public function check_and_update_cron() {
         $installed_cron_version = get_option(SEPID_LOGIN_CRON_VERSION__OPT_KEY);
 
-        if ($installed_cron_version !== SEPID_CRON_VERSION) {
+        if (!$installed_cron_version || $installed_cron_version !== SEPID_CRON_VERSION) {
             $cron_jobs = new CronJobs();
             $cron_jobs->reschedule_events('plugin cronjob version changed');
 
@@ -147,12 +146,16 @@ class Sepid{
     }
 
     public function check_and_update_db() {
-        $installed_version = get_option(SEPID_LOGIN_DB_VERSION__OPT_KEY);
+        $installed_version = get_option(SEPID_LOGIN_DB_VERSION__OPT_KEY, );
 
         global $wpdb;
-        $table_name = $wpdb->prefix . 'awca_large_api_responses';
+        $code_table_name =   $wpdb->prefix . SEPID_LOGIN_CODE__TABLE_KEY;
+        $ip_table_name =     $wpdb->prefix . SEPID_LOGIN_IP__TABLE_KEY;
 
-        if ($installed_version !== SEPID_DB_VERSION || $wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+        if (!$installed_version || $installed_version !== SEPID_DB_VERSION
+            || $wpdb->get_var("SHOW TABLES LIKE '$code_table_name'") != $code_table_name
+            || $wpdb->get_var("SHOW TABLES LIKE '$ip_table_name'") != $ip_table_name
+        ) {
             $db = new Core\Db();
             $db->make_tables();
         }

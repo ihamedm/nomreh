@@ -28,9 +28,10 @@ class Assets {
      * Load public-facing assets
      */
     public function load_public_assets() {
+        wp_enqueue_style($this->plugin_name . '-toastify', $this->plugin_url . '/assets/css/toastify.css' , array(), $this->plugin_version, 'all');
         wp_enqueue_style($this->plugin_name, $this->plugin_url . '/assets/css/public.css' , array(), $this->plugin_version, 'all');
 
-
+        wp_enqueue_script($this->plugin_name . '-toastify', $this->plugin_url . '/assets/js/toastify.js' , array('jquery'), $this->plugin_version, false);
         wp_enqueue_script($this->plugin_name, $this->plugin_url . '/assets/js/public.js' , array('jquery'), $this->plugin_version, false);
 
 

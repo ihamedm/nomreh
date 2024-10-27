@@ -2,7 +2,9 @@
   "autoload": {
     "psr-4": {
       "Sepid\\": "inc/",
-      "Sepid\\Core\\": "inc/core"
+      "Sepid\\Core\\": "inc/core",
+      "Sepid\\User\\": "inc/User",
+      "Sepid\\Utilities\\": "inc/Utilities"
     }
   },
   "authors": [

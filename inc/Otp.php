@@ -2,6 +2,8 @@
 
 namespace Sepid;
 
+use Sepid\Utilities\Helpers;
+
 class Otp {
 
     // OTP expiration time in seconds (5 minutes)
@@ -44,10 +46,19 @@ class Otp {
 
     public static function send_otp_code_ajax() {
         if (!isset($_POST['phone'])) {
-            wp_send_json_error(['message' => 'Phone number required!']);
+            wp_send_json_error(['message' => 'شماره تلفن ضروری است']);
         }
 
         $phone = $_POST['phone'];
+
+        // Convert Persian numbers to standard numbers
+        $phone = Helpers::fix_fa_nums($phone);
+
+        // Validate the phone number
+        if (!Helpers::is_valid_phone($phone)) {
+            wp_send_json_error(['message' => 'ساختار شماره موبایل وارد شده صحیح نیست!']);
+        }
+
         $user_ip = $_SERVER['REMOTE_ADDR']; // Get the user's IP address
 
         // Create an instance of the Firewall class
@@ -64,6 +75,10 @@ class Otp {
 
         // Increment the attempt count
         $firewall->increment_attempts($user_ip);
+
+        if(SEPID_DEVELOPMENT){
+            wp_send_json_success(['message' => $otp_code]);
+        }
 
         // Send the OTP code via SMS
         return Sms::send_otp($otp_code, $phone);
@@ -89,18 +104,18 @@ class Otp {
 
                 if (($current_time - $otp_time) <= self::OTP_EXPIRATION_TIME) {
                     // OTP is valid and not expired
-                    return ['success' => true ,  'message' => 'OTP code verified successfully.'];
+                    return ['success' => true ,  'message' => 'کد با موفقیت تایید شد.'];
                 } else {
                     // OTP expired
-                    return ['success' => false, 'message' => 'OTP code has expired. Please request a new one.'];
+                    return ['success' => false, 'message' => 'کد تایید منقضی شده است. صفحه را دوباره بارگزاری کنید.'];
                 }
             } else {
                 // OTP code does not match
-                return ['success' => false, 'message' => 'Invalid OTP code. Please try again.'];
+                return ['success' => false, 'message' => 'کد وارد شده اشتباه است!'];
             }
         } else {
             // No OTP found for the phone number
-            return ['success' => false, 'message' => 'No OTP found for this phone number. Please request a new one.'];
+            return ['success' => false, 'message' => 'کد تایید متعلق به این شماره نیست. دوباره تلاش کنید.'];
         }
     }
 
@@ -120,4 +135,6 @@ class Otp {
 
         return $deleted !== false; // Return true if successful, false if failed
     }
+
+
 }

@@ -68,6 +68,6 @@ class Register {
         wp_set_current_user($user->ID, $user->user_login);
         wp_set_auth_cookie($user->ID);
 
-        wp_send_json_success(['message' => 'Registration completed successfully.']);
+        wp_send_json_success(['message' => 'ثبت نام شما با موفقیت انجام شد.']);
     }
 }

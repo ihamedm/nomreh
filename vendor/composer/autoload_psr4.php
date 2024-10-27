@@ -6,6 +6,8 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Sepid\\Utilities\\' => array($baseDir . '/inc/Utilities'),
+    'Sepid\\User\\' => array($baseDir . '/inc/User'),
     'Sepid\\Core\\' => array($baseDir . '/inc/core'),
     'Sepid\\' => array($baseDir . '/inc'),
 );
