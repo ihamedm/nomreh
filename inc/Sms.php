@@ -22,7 +22,8 @@ class Sms {
         // Check for errors in the response
         if (is_wp_error($response)) {
             error_log("Error sending OTP: " . $response->get_error_message());
-            return ['success' => false, 'message' => 'Error sending OTP. Please try again.', 'raw' => print_r($response, true)];
+            wp_send_json_error(['message' => 'مشکلی در ارسال کد تایید بوجود آمده است.']);
+//            return ['success' => false, 'message' => 'Error sending OTP. Please try again.', 'raw' => print_r($response, true)];
         }
 
         // Get the HTTP status code and response body
@@ -37,14 +38,16 @@ class Sms {
                 $message = $decoded_response['return']['message'];
 
                 if ($status == 200) {
-                    return ['success' => true, 'message' => $message];
+                    wp_send_json_success(['message' => 'کد تایید ارسال شد.']);
                 } else {
-                    return ['success' => false, 'message' => $message];
+                    wp_send_json_error(['message' => 'مشکلی در ارسال کد تایید بوجود آمده است.']);
+//                    return ['success' => false, 'message' => $message];
                 }
             }
         }
 
+        wp_send_json_error(['message' => 'مشکلی در ارسال کد تایید بوجود آمده است.']);
         // Default error response
-        return ['success' => false, 'message' => 'Error sending OTP. Please try again.'];
+//        return ['success' => false, 'message' => 'Error sending OTP. Please try again.'];
     }
 }

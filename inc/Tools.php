@@ -27,7 +27,7 @@ class Tools{
                 'options' => [
                     'default' => 1,
                     'min_range' => 1,
-                    'max_range' => 100
+                    'max_range' => 500
                 ]
             ]);
 

@@ -13,7 +13,7 @@
     </table>
     <div>
 
-        <button type="submit" class="sepid-button"><span class="text">پردازش کن</span> </button>
+        <button type="submit" class="spd-button"><span class="text">پردازش کن</span> </button>
 
     </div>
 

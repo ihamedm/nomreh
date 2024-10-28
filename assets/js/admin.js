@@ -3,7 +3,7 @@ jQuery(document).ready(function($) {
         e.preventDefault();
 
         var Form = $(this);
-        var formBtn = Form.find('.sepid-button');
+        var formBtn = Form.find('.spd-button');
         var formBtnText = formBtn.find('span').text();
         var resultLogEl = Form.find('.result-log');
         var formData = new FormData(this);

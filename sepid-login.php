@@ -2,7 +2,7 @@
 /*
 Plugin Name: افزونه لاگین سپید
 Description:
-Version: 0.1
+Version: 0.3
 Author: حامد موثق پور
 */
 
@@ -68,7 +68,7 @@ class Sepid{
         define('SEPID_PLUGIN_URL', self::$plugin_url);
         define('SEPID_DB_VERSION', '1.3');
         define('SEPID_CRON_VERSION', '1.1');
-        define('SEPID_DEVELOPMENT', true);
+        define('SEPID_DEVELOPMENT', false);
 
         // behsima token
         define('SEPID_KAVEHNEGAR_TOKEN', '4568316563693457526A776C6B6A387830372F6C362B5153446951787379524D');

@@ -81,7 +81,8 @@ class Otp {
         }
 
         // Send the OTP code via SMS
-        return Sms::send_otp($otp_code, $phone);
+        Sms::send_otp($otp_code, $phone);
+
     }
 
     public static function verify_otp_code($phone, $user_input_code) {

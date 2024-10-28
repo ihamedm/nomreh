@@ -25,7 +25,7 @@ jQuery(document).ready(function($) {
             messageEl = Form.find('.form-message')
 
         var phone = $(this).find('#phone').val();
-        var timerDuration = 10; // Countdown timer duration in seconds
+        var timerDuration = 60; // Countdown timer duration in seconds
 
         $.ajax({
             url: sepid_pub_obj.ajaxurl, // WordPress AJAX URL
