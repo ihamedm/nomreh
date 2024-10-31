@@ -116,6 +116,7 @@ class Sepid{
         new CronJobs();
         new User\Login();
         new User\Register();
+        new User\UsersList();
         new Menu();
         new Tools();
         new FormShortcodes();

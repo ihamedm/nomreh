@@ -2,6 +2,8 @@
 
 namespace Sepid\User;
 
+use Sepid\Utilities\Helpers;
+
 class Register {
     public function __construct() {
         add_action('wp_ajax_complete_registration', [$this, 'complete_registration_ajax_callback']);
@@ -13,16 +15,19 @@ class Register {
      * @param string $phone The phone number to register the user with.
      * @return \WP_User|\WP_Error The newly created user object or a WP_Error object on failure.
      */
-    public static function register_user($phone, $email = null) {
+    public static function register_user($phone,$first_name, $last_name, $email = null) {
         // Generate a fake email using the phone number and the website domain
         $domain = parse_url(home_url(), PHP_URL_HOST);
-        $fake_email = $phone . '@' . $domain;
+        $fake_email = 'u_' . $phone . '@' . $domain;
 
         // Generate a random password (you can change this to a fixed password if needed)
         $password = wp_generate_password();
 
         // Prepare user data
         $user_data = array(
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'display_name' => $first_name . " " . $last_name,
             'user_login' => $phone,  // Use phone as the username
             'user_pass'  => $password,  // Set the password
             'user_email' => $email ?? $fake_email,  // Use the fake email
@@ -46,24 +51,17 @@ class Register {
 
 
     public function complete_registration_ajax_callback() {
-        $phone = sanitize_text_field($_POST['phone']);
+        $phone = Helpers::fix_fa_nums($_POST['phone']);
         $first_name = sanitize_text_field($_POST['first_name']);
         $last_name = sanitize_text_field($_POST['last_name']);
         $email = !empty($_POST['email']) ? sanitize_email($_POST['email']) : null;
 
-        $user = self::register_user($phone, $email);
+        $user = self::register_user($phone,$first_name, $last_name, $email);
 
         if (is_wp_error($user)) {
             wp_send_json_error(['message' => $user->get_error_message()]);
         }
 
-        update_user_meta($user->ID, 'first_name', $first_name);
-        update_user_meta($user->ID, 'last_name', $last_name);
-
-        wp_update_user([
-            'ID' => $user->ID,
-            'display_name' => $first_name . " " . $last_name
-        ]);
 
         wp_set_current_user($user->ID, $user->user_login);
         wp_set_auth_cookie($user->ID);
