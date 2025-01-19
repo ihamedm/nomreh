@@ -1,5 +1,5 @@
 <br class="clear">
-<h2>Orphan Orders</h2>
+<h2>ساخت کاربر برای سفارشات مهمان</h2>
 
 <form method="post" class="sepid-tools-form ajax-form">
     <input type="hidden" name="action" value="assign_users_to_orphan_orders">

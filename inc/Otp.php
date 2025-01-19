@@ -45,10 +45,28 @@ class Otp {
     }
 
     public static function send_otp_code_ajax() {
+
+        // if captcha enabled add some checks
+        $captcha_enabled = Captcha::is_captcha_enabled();
+        if($captcha_enabled){
+            if (!isset($_POST['captcha_code'])) {
+                wp_send_json_error(['message' => 'کد امنیتی را وارد کنید']);
+            }
+            if (!is_numeric($_POST['captcha_code'])) {
+                wp_send_json_error(['message' => 'برای کد امنیتی را یک مقدار عددی وارد کنید']);
+            }
+
+            $captcha_code = $_POST['captcha_code'];
+            if(!Captcha::verify_captcha($captcha_code)){
+                wp_send_json_error(['message' => 'کد امنیتی صحیح نیست!']);
+            }
+        }
+
+
+
         if (!isset($_POST['phone'])) {
             wp_send_json_error(['message' => 'شماره تلفن ضروری است']);
         }
-
         $phone = $_POST['phone'];
 
         // Convert Persian numbers to standard numbers
@@ -58,6 +76,7 @@ class Otp {
         if (!Helpers::is_valid_phone($phone)) {
             wp_send_json_error(['message' => 'ساختار شماره موبایل وارد شده صحیح نیست!']);
         }
+
 
         $user_ip = $_SERVER['REMOTE_ADDR']; // Get the user's IP address
 

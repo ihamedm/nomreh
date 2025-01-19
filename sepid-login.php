@@ -2,7 +2,7 @@
 /*
 Plugin Name: افزونه لاگین سپید
 Description:
-Version: 0.3
+Version: 0.4.1
 Author: حامد موثق پور
 */
 
@@ -70,8 +70,9 @@ class Sepid{
         define('SEPID_CRON_VERSION', '1.1');
         define('SEPID_DEVELOPMENT', false);
 
-        // behsima token
-        define('SEPID_KAVEHNEGAR_TOKEN', '4568316563693457526A776C6B6A387830372F6C362B5153446951787379524D');
+        // kavenegar
+        define('SEPID_KAVEHNEGAR_TOKEN', get_option('sepid_kavehnegar_token'));
+        define('SEPID_KAVEHNEGAR_TEMPLATE', get_option('sepid_kavehnegar_template'));
 
         define('SEPID_LOGIN_CODE__TABLE_KEY', 'sepid_login_code');
         define('SEPID_LOGIN_IP__TABLE_KEY', 'sepid_login_ip');
@@ -117,11 +118,15 @@ class Sepid{
         new User\Login();
         new User\Register();
         new User\UsersList();
+        User\User::get_instance();
         new Menu();
         new Tools();
         new FormShortcodes();
-        new Woocommerce();
         new Otp();
+
+        if(class_exists('Woocommerce')){
+            new Woocommerce();
+        }
     }
 
     public function check_and_update_cron() {

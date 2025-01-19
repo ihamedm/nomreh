@@ -119,6 +119,21 @@ input#otp_code:focus{
 }
 
 
+.spd-captcha{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 8px;
+}
+.spd-captcha input{
+    margin: 0 !important;
+}
+.spd-captcha #spd-captcha-image{
+    border-radius: 8px;
+}
+
+
 .spinner-loading {
     border: 4px solid rgba(0, 0, 0, 0.1);
     border-left-color: #ffffff;

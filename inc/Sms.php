@@ -9,7 +9,7 @@ class Sms {
         $api_url = 'https://api.kavenegar.com/v1/' . SEPID_KAVEHNEGAR_TOKEN . '/verify/lookup.json';
         $post_data = [
             'token' => $otp_code,
-            'template' => 'verify',
+            'template' => SEPID_KAVEHNEGAR_TEMPLATE,
             'receptor' => $receiver
         ];
 

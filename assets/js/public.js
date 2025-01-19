@@ -25,14 +25,16 @@ jQuery(document).ready(function($) {
             messageEl = Form.find('.form-message')
 
         var phone = $(this).find('#phone').val();
+        var captcha_code = $(this).find('#captcha-input').val();
         var timerDuration = 60; // Countdown timer duration in seconds
 
         $.ajax({
             url: sepid_pub_obj.ajaxurl, // WordPress AJAX URL
             type: 'POST',
             data: {
-                action: 'send_otp_code', // AJAX action (send_otp)
+                action: 'send_otp_code',
                 phone: phone,
+                captcha_code: captcha_code,
             },
             beforeSend: function(){
                 submitBtn.addClass('loading')
@@ -47,6 +49,7 @@ jQuery(document).ready(function($) {
                     startTimer(timerDuration); // Start the countdown timer
                 } else {
                     spd_toast(response.data.message)
+                    refreshCaptcha()
                 }
             },
             error: function(e) {
@@ -58,6 +61,26 @@ jQuery(document).ready(function($) {
             }
         });
     });
+
+    $('#spd-captcha-image').on('click', function() {
+        refreshCaptcha()
+    });
+
+    function refreshCaptcha(){
+        var captchaImage = $('#spd-captcha-image')
+        // Clear the input field
+        $('#captcha-input').val('');
+        // Generate a random number to append to the URL
+        var randomNumber = Math.floor(Math.random() * 1000);
+        // Get the current src attribute of the captcha image
+        var currentSrc = captchaImage.attr('src');
+        // Check if the src contains a query string
+        var separator = currentSrc.indexOf('?') !== -1 ? '&' : '?';
+        // Construct the new src with the random number
+        var newSrc = currentSrc + separator + 'rand=' + randomNumber;
+        // Update the src attribute of the captcha image with the new URL
+        captchaImage.attr('src', newSrc);
+    }
 
 
     $('#resend-otp').on('click', '.resend-btn', function(e){

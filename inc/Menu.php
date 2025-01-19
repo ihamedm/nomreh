@@ -10,7 +10,7 @@ class Menu{
 
     public function add_submenu() {
         add_submenu_page(
-            'tools.php',
+            'options-general.php',
             'Sepid Login',
             'Sepid Login',
             'manage_options',
