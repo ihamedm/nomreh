@@ -2,7 +2,7 @@
 /*
 Plugin Name: افزونه لاگین سپید
 Description:
-Version: 0.4.1
+Version: 0.6.0
 Author: حامد موثق پور
 */
 
@@ -89,18 +89,13 @@ class Sepid{
     }
 
     public function hooks(){
-        /**
-         * plugin activation stuff.
-         */
-        $installer = new Core\Install();
-        register_activation_hook(__FILE__, [$installer, 'run_install']);
+        add_action('init', function() {
+            $installer = new Core\Install();
+            register_activation_hook(__FILE__, [$installer, 'run_install']);
 
-        /**
-         * plugin deactivation stuff.
-         */
-        $uninstaller = new Core\Uninstall();
-        register_deactivation_hook(__FILE__, [$uninstaller, 'run_uninstall']);
-
+            $uninstaller = new Core\Uninstall();
+            register_deactivation_hook(__FILE__, [$uninstaller, 'run_uninstall']);
+        });
     }
 
     public function includes(){
@@ -123,10 +118,15 @@ class Sepid{
         new Tools();
         new FormShortcodes();
         new Otp();
+        Woodmart::get_instance();
 
-        if(class_exists('Woocommerce')){
-            new Woocommerce();
-        }
+        add_action('plugins_loaded', function() {
+            if ( class_exists( 'WooCommerce' ) ) {
+                new Woocommerce();
+            }
+        });
+
+
     }
 
     public function check_and_update_cron() {
@@ -174,3 +174,17 @@ function run_sepid(){
 }
 
 run_sepid();
+
+// @todo
+//          - check for none woocommerce site compatibility
+//          - options : to select which roles can login via otp
+//          - options : for firewall variables
+//          - fix : reset loading after error message
+//          - options : error and success permission messages
+//          - style : https://www.mobit.ir/auth
+//          - feat : cronjob to empty tables
+//          - feat : index for ip tables
+//          - feat : firewall ui, manually block ip or phone
+//          - feat : notify me when product was in-stock
+//          - feat : abondoned cart
+//          - feat : make daily reports and send to admin

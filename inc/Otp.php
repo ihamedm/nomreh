@@ -89,6 +89,7 @@ class Otp {
             wp_send_json_error(['message' => $ip_check['message']]);
         }
 
+
         // Proceed to generate and send the OTP code
         $otp_code = self::generate_otp_code($phone);
 

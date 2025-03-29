@@ -5,8 +5,10 @@ class Woocommerce
 {
 
     public function __construct(){
-        add_filter('the_content', [$this, 'show_sepid_form']);
-        add_action('template_redirect', [$this, 'redirect_checkout_to_sepid_form'], 10);
+
+            add_filter('the_content', [$this, 'show_sepid_form']);
+            add_action('template_redirect', [$this, 'redirect_checkout_to_sepid_form'], 10);
+
     }
 
     public function show_sepid_form($content) {

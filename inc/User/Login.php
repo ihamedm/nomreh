@@ -2,6 +2,7 @@
 
 namespace Sepid\User;
 
+use Sepid\Permissions;
 use Sepid\Sepid;
 use Sepid\Utilities\Helpers;
 
@@ -43,21 +44,25 @@ class Login {
                 return;
             }
 
-            // If a user was found or successfully registered, log them in
-            if ($user) {
-                update_user_meta($user->ID, 'phone', $phone);
-                wp_set_current_user($user->ID, $user->user_login);
-                wp_set_auth_cookie($user->ID);
 
-                // Delete the OTP code after successful login
-                \Sepid\Otp::delete_otp_code($phone);
-
-                // Send success response
-                wp_send_json_success(['message' => 'با موفقیت وارد شدید.']);
-            } else {
-                // Send error if the user is not found
-                wp_send_json_error(['message' => 'کاربر پیدا نشد!']);
+            // check permissions for login
+            $permissions = new Permissions();
+            $check_role = $permissions->check_user_role($user->ID);
+            if(!$check_role['success']){
+                wp_send_json_error(['message' => $check_role['message']]);
             }
+
+
+            // If a user was found or successfully registered, log them in
+            update_user_meta($user->ID, 'phone', $phone);
+            wp_set_current_user($user->ID, $user->user_login);
+            wp_set_auth_cookie($user->ID);
+
+            // Delete the OTP code after successful login
+            \Sepid\Otp::delete_otp_code($phone);
+
+            // Send success response
+            wp_send_json_success(['message' => 'با موفقیت وارد شدید.']);
         } else {
             // Send error if OTP verification failed
             wp_send_json_error(['message' => $otp_verification['message']]);

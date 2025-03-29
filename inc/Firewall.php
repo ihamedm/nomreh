@@ -20,9 +20,11 @@ class Firewall {
         $this->logger = new Logger(); // Instantiate the Logger
     }
 
+
     public function check_ip($user_ip) {
         $current_time = current_time('timestamp'); // Get current time as a timestamp
         $ip_record = $this->wpdb->get_row($this->wpdb->prepare("SELECT * FROM $this->table_name WHERE ips = %s", $user_ip));
+
 
         if ($ip_record) {
             if ($ip_record->blocked) {
