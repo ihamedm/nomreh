@@ -85,7 +85,7 @@ input#otp_code:focus{
 
 .spd-button{
     background-color: var(--first-color) !important;
-    color: #fff;
+    color: #fff !important;
     border-radius: 4px;
     position: relative;
     display: flex;

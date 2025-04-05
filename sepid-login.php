@@ -145,7 +145,7 @@ class Sepid{
         $update_checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
             'https://github.com/ihamedm/sepid-login',
             __FILE__,
-            'wp-anar'
+            'sepid-login'
         );
         //Set the branch that contains the stable release.
         $update_checker->setBranch('main');
