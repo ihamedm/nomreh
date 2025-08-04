@@ -1,11 +1,11 @@
 {
   "autoload": {
     "psr-4": {
-      "Sepid\\": "inc/",
-      "Sepid\\Core\\": "inc/core",
-      "Sepid\\User\\": "inc/User",
-      "Sepid\\Utilities\\": "inc/Utilities",
-      "Sepid\\SmsProviders\\": "inc/SmsProviders"
+      "Nomreh\\": "inc/",
+      "Nomreh\\Core\\": "inc/core",
+      "Nomreh\\User\\": "inc/User",
+      "Nomreh\\Utilities\\": "inc/Utilities",
+      "Nomreh\\SmsProviders\\": "inc/SmsProviders"
     }
   },
   "authors": [

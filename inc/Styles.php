@@ -1,5 +1,5 @@
 <?php
-namespace Sepid;
+namespace Nomreh;
 
 class Styles{
 

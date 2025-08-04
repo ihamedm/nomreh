@@ -1,6 +1,6 @@
 <?php
 
-namespace Sepid;
+namespace Nomreh;
 
 abstract class SmsProvider {
     abstract public function send_otp($otp_code, $receiver);
@@ -38,7 +38,7 @@ class Sms {
     }
 
     private static function set_current_provider() {
-        $selected_provider = get_option('sepid_sms_provider', 'kavenegar');
+        $selected_provider = get_option('nomreh_sms_provider', 'kavenegar');
         
         if (isset(self::$providers[$selected_provider])) {
             self::$current_provider = self::$providers[$selected_provider];

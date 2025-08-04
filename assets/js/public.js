@@ -29,7 +29,7 @@ jQuery(document).ready(function($) {
         var timerDuration = 60; // Countdown timer duration in seconds
 
         $.ajax({
-            url: sepid_pub_obj.ajaxurl, // WordPress AJAX URL
+            url: nomreh_pub_obj.ajaxurl, // WordPress AJAX URL
             type: 'POST',
             data: {
                 action: 'send_otp_code',
@@ -127,7 +127,7 @@ jQuery(document).ready(function($) {
         var redirect_url = $(this).find('#redirect_url').val();
 
         $.ajax({
-            url: sepid_pub_obj.ajaxurl, // WordPress AJAX URL
+            url: nomreh_pub_obj.ajaxurl, // WordPress AJAX URL
             type: 'POST',
             data: {
                 action: 'user_login', // AJAX action (user_login)
@@ -172,7 +172,7 @@ jQuery(document).ready(function($) {
             messageEl = Form.find('.form-message')
 
         $.ajax({
-            url: sepid_pub_obj.ajaxurl,
+            url: nomreh_pub_obj.ajaxurl,
             type: 'POST',
             data: {
                 action: 'complete_registration',

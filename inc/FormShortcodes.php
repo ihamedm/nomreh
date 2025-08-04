@@ -1,9 +1,9 @@
 <?php
-namespace Sepid;
+namespace Nomreh;
 
 class FormShortcodes {
     public function __construct() {
-        add_shortcode('sepid_otp_forms', array($this, 'render_otp_forms'));
+        add_shortcode('nomreh_otp_forms', array($this, 'render_otp_forms'));
     }
 
     public function render_otp_forms() {
@@ -32,7 +32,7 @@ class FormShortcodes {
                 <?php if(Captcha::is_captcha_enabled()):?>
                 <div class="spd-captcha">
                     <input type="text" id="captcha-input" name="captcha" placeholder="کد امنیتی" required>
-                    <img id="spd-captcha-image" src="<?php echo esc_url(SEPID_PLUGIN_URL . '/inc/captcha/captcha-image.php?v=' .uniqid() );?>" />
+                    <img id="spd-captcha-image" src="<?php echo esc_url(NOMREH_PLUGIN_URL . '/inc/captcha/captcha-image.php?v=' .uniqid() );?>" />
                 </div>
                 <?php endif; ?>
                 <button class="spd-button" type="submit"><span class="text">ارسال کد تایید</span></button>

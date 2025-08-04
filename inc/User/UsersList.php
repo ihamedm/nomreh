@@ -1,5 +1,5 @@
 <?php
-namespace Sepid\User;
+namespace Nomreh\User;
 
 class UsersList {
 

@@ -1,5 +1,5 @@
 <?php
-namespace Sepid\Utilities;
+namespace Nomreh\Utilities;
 
 class Helpers{
     /**

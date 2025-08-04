@@ -1,6 +1,6 @@
 jQuery(document).ready(function($) {
     // Handle SMS provider selection
-    $('#sepid_sms_provider').on('change', function() {
+    $('#nomreh_sms_provider').on('change', function() {
         var selectedProvider = $(this).val();
         
         // Hide all provider-specific settings sections
@@ -13,9 +13,9 @@ jQuery(document).ready(function($) {
     });
     
     // Trigger change event on page load
-    $('#sepid_sms_provider').trigger('change');
+    $('#nomreh_sms_provider').trigger('change');
 
-    $('.sepid-tools-form.ajax-form').on('submit', function(e) {
+    $('.nomreh-tools-form.ajax-form').on('submit', function(e) {
         e.preventDefault();
 
         var Form = $(this);
@@ -29,7 +29,7 @@ jQuery(document).ready(function($) {
         }
 
         $.ajax({
-            url: sepid_obj.ajaxurl,
+            url: nomreh_obj.ajaxurl,
             method: 'POST',
             data: formData,
             processData: false,

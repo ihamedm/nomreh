@@ -1,8 +1,8 @@
 <?php
 
-namespace Sepid\SmsProviders;
+namespace Nomreh\SmsProviders;
 
-use Sepid\SmsProvider;
+use Nomreh\SmsProvider;
 
 class KavenegarProvider extends SmsProvider {
     
@@ -32,8 +32,8 @@ class KavenegarProvider extends SmsProvider {
     }
 
     public function send_otp($otp_code, $receiver) {
-        $token = get_option('sepid_kavehnegar_token', '');
-        $template = get_option('sepid_kavehnegar_template', '');
+        $token = get_option('nomreh_kavehnegar_token', '');
+        $template = get_option('nomreh_kavehnegar_template', '');
 
         if (empty($token) || empty($template)) {
             error_log("Kavenegar SMS provider not configured properly");

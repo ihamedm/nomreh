@@ -1,18 +1,18 @@
 <?php
 /*
-Plugin Name: افزونه لاگین سپید
+Plugin Name: Nomreh
 Description:
-Version: 0.7.0
+Version: 0.8.0
 Author: حامد موثق پور
 */
 
-namespace Sepid;
+namespace Nomreh;
 
 if (!defined('ABSPATH')) {
     exit;
 }
 
-class Sepid{
+class Nomreh{
 
     public static $plugin_url;
     public static $plugin_path;
@@ -62,24 +62,24 @@ class Sepid{
         /**
          * Define needed constants to use in plugin
          */
-        define('SEPID_PLUGIN_TEXT_DOMAIN', self::$plugin_text_domain);
-        define('SEPID_PLUGIN_VERSION', self::$plugin_version);
-        define('SEPID_PLUGIN_PATH', self::$plugin_path);
-        define('SEPID_PLUGIN_URL', self::$plugin_url);
-        define('SEPID_DB_VERSION', '1.3');
-        define('SEPID_CRON_VERSION', '1.1');
-        define('SEPID_DEVELOPMENT', false);
+        define('NOMREH_PLUGIN_TEXT_DOMAIN', self::$plugin_text_domain);
+        define('NOMREH_PLUGIN_VERSION', self::$plugin_version);
+        define('NOMREH_PLUGIN_PATH', self::$plugin_path);
+        define('NOMREH_PLUGIN_URL', self::$plugin_url);
+        define('NOMREH_DB_VERSION', '1.3');
+        define('NOMREH_CRON_VERSION', '1.1');
+        define('NOMREH_DEVELOPMENT', false);
 
-        define('SEPID_LOGIN_CODE__TABLE_KEY', 'sepid_login_code');
-        define('SEPID_LOGIN_IP__TABLE_KEY', 'sepid_login_ip');
-        define('SEPID_LOGIN_VERSION__OPT_KEY', '_sepid_login_version');
-        define('SEPID_LOGIN_CRON_VERSION__OPT_KEY', '_sepid_login_cron_version');
-        define('SEPID_LOGIN_DB_VERSION__OPT_KEY', '_sepid_login_db_version');
+        define('NOMREH_LOGIN_CODE__TABLE_KEY', 'nomreh_login_code');
+        define('NOMREH_LOGIN_IP__TABLE_KEY', 'nomreh_login_ip');
+        define('NOMREH_LOGIN_VERSION__OPT_KEY', '_nomreh_login_version');
+        define('NOMREH_LOGIN_CRON_VERSION__OPT_KEY', '_nomreh_login_cron_version');
+        define('NOMREH_LOGIN_DB_VERSION__OPT_KEY', '_nomreh_login_db_version');
 
 
         // @todo get these data from option page
-        define('SEPID_REDIRECT_URL', get_site_url());
-        define('SEPID_LOGIN_PAGE_SLUG', 'my-account');
+        define('NOMREH_REDIRECT_URL', get_site_url());
+        define('NOMREH_LOGIN_PAGE_SLUG', 'my-account');
 
 
     }
@@ -129,35 +129,35 @@ class Sepid{
     }
 
     public function check_and_update_cron() {
-        $installed_cron_version = get_option(SEPID_LOGIN_CRON_VERSION__OPT_KEY);
+        $installed_cron_version = get_option(NOMREH_LOGIN_CRON_VERSION__OPT_KEY);
 
-        if (!$installed_cron_version || $installed_cron_version !== SEPID_CRON_VERSION) {
+        if (!$installed_cron_version || $installed_cron_version !== NOMREH_CRON_VERSION) {
             $cron_jobs = new CronJobs();
             $cron_jobs->reschedule_events('plugin cronjob version changed');
 
-            update_option(SEPID_LOGIN_CRON_VERSION__OPT_KEY, SEPID_CRON_VERSION);
+            update_option(NOMREH_LOGIN_CRON_VERSION__OPT_KEY, NOMREH_CRON_VERSION);
         }
     }
 
     public function plugin_update_check()
     {
         $update_checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
-            'https://github.com/ihamedm/sepid-login',
+            'https://github.com/ihamedm/nomreh',
             __FILE__,
-            'sepid-login'
+            'nomreh'
         );
         //Set the branch that contains the stable release.
         $update_checker->setBranch('main');
     }
 
     public function check_and_update_db() {
-        $installed_version = get_option(SEPID_LOGIN_DB_VERSION__OPT_KEY, );
+        $installed_version = get_option(NOMREH_LOGIN_DB_VERSION__OPT_KEY, );
 
         global $wpdb;
-        $code_table_name =   $wpdb->prefix . SEPID_LOGIN_CODE__TABLE_KEY;
-        $ip_table_name =     $wpdb->prefix . SEPID_LOGIN_IP__TABLE_KEY;
+        $code_table_name =   $wpdb->prefix . NOMREH_LOGIN_CODE__TABLE_KEY;
+        $ip_table_name =     $wpdb->prefix . NOMREH_LOGIN_IP__TABLE_KEY;
 
-        if (!$installed_version || $installed_version !== SEPID_DB_VERSION
+        if (!$installed_version || $installed_version !== NOMREH_DB_VERSION
             || $wpdb->get_var("SHOW TABLES LIKE '$code_table_name'") != $code_table_name
             || $wpdb->get_var("SHOW TABLES LIKE '$ip_table_name'") != $ip_table_name
         ) {
@@ -168,11 +168,11 @@ class Sepid{
 
 }
 
-function run_sepid(){
-    return Sepid::instance();
+function run_nomreh(){
+    return Nomreh::instance();
 }
 
-run_sepid();
+run_nomreh();
 
 // @todo
 //          - check for none woocommerce site compatibility

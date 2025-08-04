@@ -1,12 +1,12 @@
 <?php
-namespace Sepid\Core;
+namespace Nomreh\Core;
 
 class Logger {
     private $logDir;
     private $logFile;
 
     public function __construct() {
-        $this->logDir = WP_CONTENT_DIR . '/sepid-logs';
+        $this->logDir = WP_CONTENT_DIR . '/nomreh-logs';
         $this->logFile = $this->logDir . '/login.log';
 
         if (!file_exists($this->logDir)) {

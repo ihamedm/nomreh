@@ -1,8 +1,8 @@
 <?php
-namespace Sepid;
+namespace Nomreh;
 
-use Sepid\User\Register;
-use Sepid\User\User;
+use Nomreh\User\Register;
+use Nomreh\User\User;
 
 class Tools{
 
@@ -14,7 +14,7 @@ class Tools{
     public function assign_users_to_orphan_orders_ajax_callback() {
         try {
             // Verify nonce and user capabilities
-            if (!check_ajax_referer('sepid_ajax_nonce', 'security', false)) {
+            if (!check_ajax_referer('nomreh_ajax_nonce', 'security', false)) {
                 throw new \Exception('Security check failed');
             }
 

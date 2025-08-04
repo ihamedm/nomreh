@@ -1,8 +1,8 @@
 <?php
 
-namespace Sepid;
+namespace Nomreh;
 
-use Sepid\Core\Logger;
+use Nomreh\Core\Logger;
 
 class Permissions{
 

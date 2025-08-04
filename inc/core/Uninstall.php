@@ -1,7 +1,7 @@
 <?php
-namespace Sepid\Core;
+namespace Nomreh\Core;
 
-use Sepid\CronJobs;
+use Nomreh\CronJobs;
 
 class Uninstall{
 
@@ -15,8 +15,8 @@ class Uninstall{
 
     private static function remove_plugin_options()
     {
-        delete_option(SEPID_LOGIN_VERSION__OPT_KEY);
-        delete_option(SEPID_LOGIN_CRON_VERSION__OPT_KEY);
+        delete_option(NOMREH_LOGIN_VERSION__OPT_KEY);
+        delete_option(NOMREH_LOGIN_CRON_VERSION__OPT_KEY);
     }
 
     public function clear_scheduled(){

@@ -3,7 +3,7 @@ session_start();
 $random = rand(1, 9) . rand(1, 9) . rand(1, 9);
 
 // Set the value in the session
-$_SESSION['sepid_captcha_value'] = $random;
+$_SESSION['nomreh_captcha_value'] = $random;
 
 $captcha = imagecreatefromjpeg("captcha-bg.jpg");
 $color = imagecolorallocate($captcha, 248, 92, 81);

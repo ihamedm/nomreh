@@ -1,5 +1,5 @@
 <?php
-namespace Sepid\Core;
+namespace Nomreh\Core;
 
 class Install{
 
@@ -11,9 +11,9 @@ class Install{
 
     public static function update_plugin_version()
     {
-        $current_version = get_option(SEPID_LOGIN_VERSION__OPT_KEY);
-        if ($current_version !== SEPID_PLUGIN_VERSION) {
-            update_option(SEPID_LOGIN_VERSION__OPT_KEY, SEPID_PLUGIN_VERSION);
+        $current_version = get_option(NOMREH_LOGIN_VERSION__OPT_KEY);
+        if ($current_version !== NOMREH_PLUGIN_VERSION) {
+            update_option(NOMREH_LOGIN_VERSION__OPT_KEY, NOMREH_PLUGIN_VERSION);
         }
     }
 

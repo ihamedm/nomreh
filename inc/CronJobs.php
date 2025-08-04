@@ -1,20 +1,13 @@
 <?php
 
-namespace Sepid;
+namespace Nomreh;
 
 class CronJobs {
 
     public function __construct() {
 
         add_action('wp', [$this, 'schedule_events']);
-//        add_action('process_mp3_duration_cron_event', [$this, 'processPostsForMp3Duration']);
     }
-
-//    public function processPostsForMp3Duration() {
-//        $processMp3Duration = new Mp3Duration();
-//        $cron_job_limit = get_option('wpma_cron_limit', 30);
-//        $processMp3Duration->bulk_process_unprocessed_post($cron_job_limit);
-//    }
 
     public function schedule_events() {
         if (!wp_next_scheduled('remove_transient_data_cron_event')) {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Sepid\User;
+namespace Nomreh\User;
 
-use Sepid\Utilities\Helpers;
+use Nomreh\Utilities\Helpers;
 
 class Register {
     public function __construct() {

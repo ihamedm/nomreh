@@ -1,6 +1,6 @@
 <?php
 
-namespace Sepid;
+namespace Nomreh;
 
 class Menu{
 
@@ -11,10 +11,10 @@ class Menu{
     public function add_submenu() {
         add_submenu_page(
             'options-general.php',
-            'Sepid Login',
-            'Sepid Login',
+            'Nomreh',
+            'Nomreh',
             'manage_options',
-            'sepid-login',
+            'nomreh',
             [$this, 'page_content']
         );
     }
@@ -23,10 +23,10 @@ class Menu{
         $active_tab = $_GET['tab'] ?? 'settings';
         ?>
         <div class="wrap">
-            <h2>Sepid Login</h2>
+            <h2>Nomreh</h2>
 
             <h2 class="nav-tab-wrapper">
-                <a href="?page=sepid-login&tab=settings" class="nav-tab <?php echo $active_tab === 'settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
+                <a href="?page=nomreh&tab=settings" class="nav-tab <?php echo $active_tab === 'settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
             </h2>
 
             <?php include_once dirname(__FILE__) . '/menu/'.$active_tab.'.php';?>

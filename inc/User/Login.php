@@ -1,10 +1,10 @@
 <?php
 
-namespace Sepid\User;
+namespace Nomreh\User;
 
-use Sepid\Permissions;
-use Sepid\Sepid;
-use Sepid\Utilities\Helpers;
+use Nomreh\Permissions;
+use Nomreh\Nomreh;
+use Nomreh\Utilities\Helpers;
 
 class Login {
 
@@ -28,7 +28,7 @@ class Login {
         }
 
         // Verify the OTP code
-        $otp_verification = \Sepid\Otp::verify_otp_code($phone, $otp_code);
+        $otp_verification = \Nomreh\Otp::verify_otp_code($phone, $otp_code);
 
         if ($otp_verification['success']) {
             // OTP code verified, attempt to log in the user
@@ -59,7 +59,7 @@ class Login {
             wp_set_auth_cookie($user->ID);
 
             // Delete the OTP code after successful login
-            \Sepid\Otp::delete_otp_code($phone);
+            \Nomreh\Otp::delete_otp_code($phone);
 
             // Send success response
             wp_send_json_success(['message' => 'با موفقیت وارد شدید.']);

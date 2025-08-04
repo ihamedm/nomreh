@@ -1,8 +1,8 @@
 <?php
 
-namespace Sepid;
+namespace Nomreh;
 
-use Sepid\Utilities\Helpers;
+use Nomreh\Utilities\Helpers;
 
 class Otp {
 
@@ -28,7 +28,7 @@ class Otp {
     private static function save_otp_code($phone, $otp_code) {
         global $wpdb;
 
-        $table_name = $wpdb->prefix . SEPID_LOGIN_CODE__TABLE_KEY;
+        $table_name = $wpdb->prefix . NOMREH_LOGIN_CODE__TABLE_KEY;
 
         // Remove old OTPs for the phone number
         $wpdb->delete($table_name, ['phone' => $phone]);
@@ -96,66 +96,62 @@ class Otp {
         // Increment the attempt count
         $firewall->increment_attempts($user_ip);
 
-        if(SEPID_DEVELOPMENT){
+        if(NOMREH_DEVELOPMENT){
             wp_send_json_success(['message' => $otp_code]);
         }
 
         // Send the OTP code via SMS
-        Sms::send_otp($otp_code, $phone);
+        $sms = new Sms();
+        $result = $sms->send_otp($phone, $otp_code);
 
+        if ($result['success']) {
+            wp_send_json_success(['message' => 'کد تایید ارسال شد']);
+        } else {
+            wp_send_json_error(['message' => $result['message']]);
+        }
     }
 
     public static function verify_otp_code($phone, $user_input_code) {
         global $wpdb;
 
-        $table_name = $wpdb->prefix . SEPID_LOGIN_CODE__TABLE_KEY;
+        $table_name = $wpdb->prefix . NOMREH_LOGIN_CODE__TABLE_KEY;
 
-        // Get the stored OTP code and datetime for the phone number
-        $result = $wpdb->get_row($wpdb->prepare(
-            "SELECT code, datetime FROM $table_name WHERE phone = %s",
-            $phone
-        ));
+        // Get the stored OTP code for the phone number
+        $stored_otp = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT * FROM $table_name WHERE phone = %s ORDER BY datetime DESC LIMIT 1",
+                $phone
+            )
+        );
 
-        if ($result) {
-            // Check if the OTP code matches
-            if ($result->code == $user_input_code) {
-                // Check if the OTP is expired
-                $otp_time = strtotime($result->datetime);
-                $current_time = current_time('timestamp', 1); // UTC time
-
-                if (($current_time - $otp_time) <= self::OTP_EXPIRATION_TIME) {
-                    // OTP is valid and not expired
-                    return ['success' => true ,  'message' => 'کد با موفقیت تایید شد.'];
-                } else {
-                    // OTP expired
-                    return ['success' => false, 'message' => 'کد تایید منقضی شده است. صفحه را دوباره بارگزاری کنید.'];
-                }
-            } else {
-                // OTP code does not match
-                return ['success' => false, 'message' => 'کد وارد شده اشتباه است!'];
-            }
-        } else {
-            // No OTP found for the phone number
-            return ['success' => false, 'message' => 'کد تایید متعلق به این شماره نیست. دوباره تلاش کنید.'];
+        if (!$stored_otp) {
+            return false;
         }
+
+        // Check if the OTP has expired
+        $otp_time = strtotime($stored_otp->datetime);
+        $current_time = time();
+        if ($current_time - $otp_time > self::OTP_EXPIRATION_TIME) {
+            // Delete expired OTP
+            self::delete_otp_code($phone);
+            return false;
+        }
+
+        // Compare the user input with the stored OTP
+        if ($user_input_code == $stored_otp->code) {
+            // Delete the OTP after successful verification
+            self::delete_otp_code($phone);
+            return true;
+        }
+
+        return false;
     }
 
-    /**
-     * Delete the OTP code for the given phone number.
-     *
-     * @param string $phone The phone number to delete the OTP for.
-     * @return bool True on success, false on failure.
-     */
     public static function delete_otp_code($phone) {
         global $wpdb;
 
-        $table_name = $wpdb->prefix . SEPID_LOGIN_CODE__TABLE_KEY;
+        $table_name = $wpdb->prefix . NOMREH_LOGIN_CODE__TABLE_KEY;
 
-        // Delete the OTP code for the given phone number
-        $deleted = $wpdb->delete($table_name, ['phone' => $phone]);
-
-        return $deleted !== false; // Return true if successful, false if failed
+        $wpdb->delete($table_name, ['phone' => $phone]);
     }
-
-
 }

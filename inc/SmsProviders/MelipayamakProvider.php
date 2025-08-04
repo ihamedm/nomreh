@@ -1,8 +1,8 @@
 <?php
 
-namespace Sepid\SmsProviders;
+namespace Nomreh\SmsProviders;
 
-use Sepid\SmsProvider;
+use Nomreh\SmsProvider;
 
 class MelipayamakProvider extends SmsProvider {
     
@@ -38,9 +38,9 @@ class MelipayamakProvider extends SmsProvider {
     }
 
     public function send_otp($otp_code, $receiver) {
-        $username = get_option('sepid_melipayamak_username', '');
-        $password = get_option('sepid_melipayamak_password', '');
-        $body_id = get_option('sepid_melipayamak_body_id', '');
+        $username = get_option('nomreh_melipayamak_username', '');
+        $password = get_option('nomreh_melipayamak_password', '');
+        $body_id = get_option('nomreh_melipayamak_body_id', '');
 
         if (empty($username) || empty($password) || empty($body_id)) {
             error_log("Melipayamak SMS provider not configured properly");

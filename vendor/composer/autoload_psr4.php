@@ -6,9 +6,9 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Sepid\\Utilities\\' => array($baseDir . '/inc/Utilities'),
-    'Sepid\\User\\' => array($baseDir . '/inc/User'),
-    'Sepid\\SmsProviders\\' => array($baseDir . '/inc/SmsProviders'),
-    'Sepid\\Core\\' => array($baseDir . '/inc/core'),
-    'Sepid\\' => array($baseDir . '/inc'),
+    'Nomreh\\Utilities\\' => array($baseDir . '/inc/Utilities'),
+    'Nomreh\\User\\' => array($baseDir . '/inc/User'),
+    'Nomreh\\SmsProviders\\' => array($baseDir . '/inc/SmsProviders'),
+    'Nomreh\\Core\\' => array($baseDir . '/inc/core'),
+    'Nomreh\\' => array($baseDir . '/inc'),
 );

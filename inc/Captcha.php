@@ -1,6 +1,6 @@
 <?php
 
-namespace Sepid;
+namespace Nomreh;
 
 class Captcha {
     protected static $instance = null;
@@ -20,13 +20,13 @@ class Captcha {
 
         // Start or resume the session
         session_start();
-        $stored_captcha = $_SESSION['sepid_captcha_value'];
+        $stored_captcha = $_SESSION['nomreh_captcha_value'];
 
         return $captcha_value === $stored_captcha;
     }
 
     public static function is_captcha_enabled() {
-        $captcha_enabled = get_option('sepid_active_captcha', 'no');
+        $captcha_enabled = get_option('nomreh_active_captcha', 'no');
 
         if($captcha_enabled == 'yes') {
             return true;

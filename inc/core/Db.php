@@ -1,5 +1,5 @@
 <?php
-namespace Sepid\Core;
+namespace Nomreh\Core;
 
 class Db{
 
@@ -14,11 +14,11 @@ class Db{
         $this->make_code_table();
         $this->make_ip_table();
 
-        update_option(SEPID_LOGIN_DB_VERSION__OPT_KEY, SEPID_DB_VERSION);
+        update_option(NOMREH_LOGIN_DB_VERSION__OPT_KEY, NOMREH_DB_VERSION);
     }
 
     private function make_code_table(){
-        $table_name = $this->wpdb->prefix . SEPID_LOGIN_CODE__TABLE_KEY;
+        $table_name = $this->wpdb->prefix . NOMREH_LOGIN_CODE__TABLE_KEY;
         $charset_collate = $this->wpdb->get_charset_collate();
 
         $sql = "CREATE TABLE $table_name (
@@ -34,7 +34,7 @@ class Db{
     }
 
     private function make_ip_table(){
-        $table_name = $this->wpdb->prefix . SEPID_LOGIN_IP__TABLE_KEY;
+        $table_name = $this->wpdb->prefix . NOMREH_LOGIN_IP__TABLE_KEY;
         $charset_collate = $this->wpdb->get_charset_collate();
 
         $sql = "CREATE TABLE $table_name (

@@ -1,5 +1,5 @@
 <?php
-namespace Sepid\Core;
+namespace Nomreh\Core;
 
 class Assets {
 
@@ -10,9 +10,9 @@ class Assets {
     private $plugin_url;
 
     public function __construct() {
-        $this->plugin_name = SEPID_PLUGIN_TEXT_DOMAIN;
-        $this->plugin_version = SEPID_PLUGIN_VERSION;
-        $this->plugin_url = SEPID_PLUGIN_URL;
+        $this->plugin_name = NOMREH_PLUGIN_TEXT_DOMAIN;
+        $this->plugin_version = NOMREH_PLUGIN_VERSION;
+        $this->plugin_url = NOMREH_PLUGIN_URL;
 
 
 
@@ -35,8 +35,8 @@ class Assets {
         wp_enqueue_script($this->plugin_name, $this->plugin_url . '/assets/js/public.js' , array('jquery'), $this->plugin_version, false);
 
 
-        wp_localize_script($this->plugin_name, 'sepid_pub_obj', array(
-            'ajax_nonce' => wp_create_nonce('sepid_ajax_nonce'),
+        wp_localize_script($this->plugin_name, 'nomreh_pub_obj', array(
+            'ajax_nonce' => wp_create_nonce('nomreh_ajax_nonce'),
             'ajaxurl' => admin_url('admin-ajax.php')
         ));
 
@@ -52,8 +52,8 @@ class Assets {
         wp_enqueue_script($this->plugin_name, $this->plugin_url . '/assets/js/admin.js' , array('jquery'), $this->plugin_version, false);
 
 
-        wp_localize_script($this->plugin_name, 'sepid_obj', array(
-            'ajax_nonce' => wp_create_nonce('sepid_ajax_nonce'),
+        wp_localize_script($this->plugin_name, 'nomreh_obj', array(
+            'ajax_nonce' => wp_create_nonce('nomreh_ajax_nonce'),
             'ajaxurl' => admin_url('admin-ajax.php')
         ));
 

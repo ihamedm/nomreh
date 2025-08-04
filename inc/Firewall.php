@@ -1,8 +1,8 @@
 <?php
 
-namespace Sepid;
+namespace Nomreh;
 
-use Sepid\Core\Logger;
+use Nomreh\Core\Logger;
 
 class Firewall {
 
@@ -16,7 +16,7 @@ class Firewall {
     public function __construct() {
         global $wpdb;
         $this->wpdb = $wpdb;
-        $this->table_name = $wpdb->prefix . SEPID_LOGIN_IP__TABLE_KEY;
+        $this->table_name = $wpdb->prefix . NOMREH_LOGIN_IP__TABLE_KEY;
         $this->logger = new Logger(); // Instantiate the Logger
     }
 

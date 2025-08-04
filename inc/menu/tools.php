@@ -1,9 +1,9 @@
 <br class="clear">
 <h2>ساخت کاربر برای سفارشات مهمان</h2>
 
-<form method="post" class="sepid-tools-form ajax-form">
+<form method="post" class="nomreh-tools-form ajax-form">
     <input type="hidden" name="action" value="assign_users_to_orphan_orders">
-    <input type="hidden" name="security" value="<?php echo esc_attr(wp_create_nonce('sepid_ajax_nonce')); ?>">
+    <input type="hidden" name="security" value="<?php echo esc_attr(wp_create_nonce('nomreh_ajax_nonce')); ?>">
     <table class="form-table">
         <tr>
             <th><label for="limit">تعداد سفارش برای پردازش</label></th>

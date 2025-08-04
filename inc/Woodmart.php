@@ -1,5 +1,5 @@
 <?php
-namespace Sepid;
+namespace Nomreh;
 
 class Woodmart{
 
@@ -13,7 +13,7 @@ class Woodmart{
     }
 
     public function __construct(){
-        if(get_option('sepid_woodmart_support') == 'yes'){
+        if(get_option('nomreh_woodmart_support') == 'yes'){
             // Remove the original sidebar login form
             add_action('init', function() {
                 remove_action('woodmart_before_wp_footer', 'woodmart_sidebar_login_form', 160);
@@ -68,7 +68,7 @@ class Woodmart{
 
             <?php
             // Your custom shortcode here
-            echo do_shortcode('[sepid_otp_forms]');
+            echo do_shortcode('[nomreh_otp_forms]');
             ?>
         </div>
         <?php
