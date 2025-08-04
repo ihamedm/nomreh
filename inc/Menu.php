@@ -27,7 +27,6 @@ class Menu{
 
             <h2 class="nav-tab-wrapper">
                 <a href="?page=sepid-login&tab=settings" class="nav-tab <?php echo $active_tab === 'settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
-                <a href="?page=sepid-login&tab=tools" class="nav-tab <?php echo $active_tab === 'tools' ? 'nav-tab-active' : ''; ?>">Tools</a>
             </h2>
 
             <?php include_once dirname(__FILE__) . '/menu/'.$active_tab.'.php';?>

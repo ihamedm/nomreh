@@ -2,7 +2,7 @@
 /*
 Plugin Name: افزونه لاگین سپید
 Description:
-Version: 0.6.0
+Version: 0.7.0
 Author: حامد موثق پور
 */
 
@@ -70,10 +70,6 @@ class Sepid{
         define('SEPID_CRON_VERSION', '1.1');
         define('SEPID_DEVELOPMENT', false);
 
-        // kavenegar
-        define('SEPID_KAVEHNEGAR_TOKEN', get_option('sepid_kavehnegar_token'));
-        define('SEPID_KAVEHNEGAR_TEMPLATE', get_option('sepid_kavehnegar_template'));
-
         define('SEPID_LOGIN_CODE__TABLE_KEY', 'sepid_login_code');
         define('SEPID_LOGIN_IP__TABLE_KEY', 'sepid_login_ip');
         define('SEPID_LOGIN_VERSION__OPT_KEY', '_sepid_login_version');
@@ -119,6 +115,9 @@ class Sepid{
         new FormShortcodes();
         new Otp();
         Woodmart::get_instance();
+
+        // Initialize SMS system
+        Sms::init();
 
         add_action('plugins_loaded', function() {
             if ( class_exists( 'WooCommerce' ) ) {

@@ -4,7 +4,8 @@
       "Sepid\\": "inc/",
       "Sepid\\Core\\": "inc/core",
       "Sepid\\User\\": "inc/User",
-      "Sepid\\Utilities\\": "inc/Utilities"
+      "Sepid\\Utilities\\": "inc/Utilities",
+      "Sepid\\SmsProviders\\": "inc/SmsProviders"
     }
   },
   "authors": [

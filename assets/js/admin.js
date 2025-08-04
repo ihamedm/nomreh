@@ -1,4 +1,20 @@
 jQuery(document).ready(function($) {
+    // Handle SMS provider selection
+    $('#sepid_sms_provider').on('change', function() {
+        var selectedProvider = $(this).val();
+        
+        // Hide all provider-specific settings sections
+        $('.provider-settings').hide();
+        
+        // Show the selected provider's settings
+        if (selectedProvider) {
+            $('.' + selectedProvider + '-settings').show();
+        }
+    });
+    
+    // Trigger change event on page load
+    $('#sepid_sms_provider').trigger('change');
+
     $('.sepid-tools-form.ajax-form').on('submit', function(e) {
         e.preventDefault();
 

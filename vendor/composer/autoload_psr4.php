@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'Sepid\\Utilities\\' => array($baseDir . '/inc/Utilities'),
     'Sepid\\User\\' => array($baseDir . '/inc/User'),
+    'Sepid\\SmsProviders\\' => array($baseDir . '/inc/SmsProviders'),
     'Sepid\\Core\\' => array($baseDir . '/inc/core'),
     'Sepid\\' => array($baseDir . '/inc'),
 );

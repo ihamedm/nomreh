@@ -11,6 +11,7 @@ class ComposerStaticInit8d070178755c320c69f93ee4800660ef
         array (
             'Sepid\\Utilities\\' => 16,
             'Sepid\\User\\' => 11,
+            'Sepid\\SmsProviders\\' => 19,
             'Sepid\\Core\\' => 11,
             'Sepid\\' => 6,
         ),
@@ -24,6 +25,10 @@ class ComposerStaticInit8d070178755c320c69f93ee4800660ef
         'Sepid\\User\\' => 
         array (
             0 => __DIR__ . '/../..' . '/inc/User',
+        ),
+        'Sepid\\SmsProviders\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/inc/SmsProviders',
         ),
         'Sepid\\Core\\' => 
         array (
