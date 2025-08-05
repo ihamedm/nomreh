@@ -101,14 +101,7 @@ class Otp {
         }
 
         // Send the OTP code via SMS
-        $sms = new Sms();
-        $result = $sms->send_otp($phone, $otp_code);
-
-        if ($result['success']) {
-            wp_send_json_success(['message' => 'کد تایید ارسال شد']);
-        } else {
-            wp_send_json_error(['message' => $result['message']]);
-        }
+        Sms::send_otp($otp_code, $phone);
     }
 
     public static function verify_otp_code($phone, $user_input_code) {
@@ -116,35 +109,34 @@ class Otp {
 
         $table_name = $wpdb->prefix . NOMREH_LOGIN_CODE__TABLE_KEY;
 
-        // Get the stored OTP code for the phone number
-        $stored_otp = $wpdb->get_row(
-            $wpdb->prepare(
-                "SELECT * FROM $table_name WHERE phone = %s ORDER BY datetime DESC LIMIT 1",
-                $phone
-            )
-        );
+        // Get the stored OTP code and datetime for the phone number
+        $result = $wpdb->get_row($wpdb->prepare(
+            "SELECT code, datetime FROM $table_name WHERE phone = %s",
+            $phone
+        ));
 
-        if (!$stored_otp) {
-            return false;
+        if ($result) {
+            // Check if the OTP code matches
+            if ($result->code == $user_input_code) {
+                // Check if the OTP is expired
+                $otp_time = strtotime($result->datetime);
+                $current_time = current_time('timestamp', 1); // UTC time
+
+                if (($current_time - $otp_time) <= self::OTP_EXPIRATION_TIME) {
+                    // OTP is valid and not expired
+                    return ['success' => true ,  'message' => 'کد با موفقیت تایید شد.'];
+                } else {
+                    // OTP expired
+                    return ['success' => false, 'message' => 'کد تایید منقضی شده است. صفحه را دوباره بارگزاری کنید.'];
+                }
+            } else {
+                // OTP code does not match
+                return ['success' => false, 'message' => 'کد وارد شده اشتباه است!'];
+            }
+        } else {
+            // No OTP found for the phone number
+            return ['success' => false, 'message' => 'کد تایید متعلق به این شماره نیست. دوباره تلاش کنید.'];
         }
-
-        // Check if the OTP has expired
-        $otp_time = strtotime($stored_otp->datetime);
-        $current_time = time();
-        if ($current_time - $otp_time > self::OTP_EXPIRATION_TIME) {
-            // Delete expired OTP
-            self::delete_otp_code($phone);
-            return false;
-        }
-
-        // Compare the user input with the stored OTP
-        if ($user_input_code == $stored_otp->code) {
-            // Delete the OTP after successful verification
-            self::delete_otp_code($phone);
-            return true;
-        }
-
-        return false;
     }
 
     public static function delete_otp_code($phone) {

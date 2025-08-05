@@ -18,6 +18,18 @@ if (isset($_POST['save_nomreh_login_settings'])) {
     // Success message
     echo '<div class="updated"><p>تنظیمات ذخیره شد.</p></div>';
 }
+
+// Handle test connection
+if (isset($_POST['test_melipayamak_connection'])) {
+    $provider = new \Nomreh\SmsProviders\MelipayamakProvider();
+    $result = $provider->test_connection();
+    
+    if ($result['success']) {
+        echo '<div class="updated"><p>اتصال موفق: ' . esc_html($result['response']) . '</p></div>';
+    } else {
+        echo '<div class="error"><p>خطا در اتصال: ' . esc_html($result['message']) . '</p></div>';
+    }
+}
 ?>
 <br class="clear">
 
@@ -49,5 +61,6 @@ if (isset($_POST['save_nomreh_login_settings'])) {
     </table>
     <p>
         <input type="submit" name="save_nomreh_login_settings" value="ذخیره تنظیمات" class="button button-primary">
+        <input type="submit" name="test_melipayamak_connection" value="تست اتصال" class="button button-secondary">
     </p>
 </form> 

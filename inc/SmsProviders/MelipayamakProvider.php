@@ -52,7 +52,11 @@ class MelipayamakProvider extends SmsProvider {
         $text = $otp_code; // The OTP code as the first argument
 
         // Melipayamak REST API endpoint for BaseServiceNumber
+        // Alternative endpoint for template messages: https://rest.payamak-panel.com/api/SendSMS/SendByBaseNumber
         $api_url = 'https://rest.payamak-panel.com/api/SendSMS/BaseServiceNumber';
+        
+        // Try alternative endpoint if the first one doesn't work
+        // $api_url = 'https://rest.payamak-panel.com/api/SendSMS/SendByBaseNumber';
         
         $data = [
             'username' => $username,
@@ -61,6 +65,16 @@ class MelipayamakProvider extends SmsProvider {
             'to' => $receiver,
             'bodyId' => $body_id
         ];
+        
+        // Alternative parameter format (if the above doesn't work)
+        // $data = [
+        //     'username' => $username,
+        //     'password' => $password,
+        //     'text' => $text,
+        //     'to' => $receiver,
+        //     'bodyId' => $body_id,
+        //     'from' => '' // Add sender number if required
+        // ];
 
         // Build query string
         $post_data = http_build_query($data);
@@ -119,7 +133,7 @@ class MelipayamakProvider extends SmsProvider {
             '-3' => 'خط ارسالی در سیستم تعریف نشده است، با پشتیبانی سامانه تماس بگیرید',
             '-2' => 'محدودیت تعداد شماره، محدودیت هربار ارسال یک شماره موبایل می‌باشد',
             '-1' => 'دسترسی برای استفاده از این وبسرویس غیرفعال است. با پشتیبانی تماس بگیرید',
-            '0' => 'نام کاربری یا رمزعبور صحیح نمی‌باشد',
+            '0' => 'نام کاربری یا رمزعبور صحیح نمی‌باشد (یا ممکن است موفقیت باشد)',
             '2' => 'اعتبار کافی نمی‌باشد',
             '6' => 'سامانه درحال بروزرسانی می‌باشد',
             '7' => 'متن حاوی کلمه فیلتر شده می‌باشد، با واحد اداری تماس بگیرید',
@@ -132,5 +146,50 @@ class MelipayamakProvider extends SmsProvider {
         ];
 
         return isset($error_messages[$error_code]) ? $error_messages[$error_code] : 'خطای نامشخص در ارسال پیامک (کد: ' . $error_code . ')';
+    }
+    
+    /**
+     * Test method to debug API connection
+     */
+    public function test_connection() {
+        $username = get_option('nomreh_melipayamak_username', '');
+        $password = get_option('nomreh_melipayamak_password', '');
+        
+        if (empty($username) || empty($password)) {
+            return ['success' => false, 'message' => 'Credentials not configured'];
+        }
+        
+        // Test API endpoint
+        $api_url = 'https://rest.payamak-panel.com/api/SendSMS/GetCredit';
+        
+        $data = [
+            'username' => $username,
+            'password' => $password
+        ];
+        
+        $post_data = http_build_query($data);
+        
+        $response = wp_remote_post($api_url, [
+            'body' => $post_data,
+            'timeout' => 30,
+            'headers' => [
+                'content-type' => 'application/x-www-form-urlencoded'
+            ]
+        ]);
+        
+        if (is_wp_error($response)) {
+            return ['success' => false, 'message' => 'Connection error: ' . $response->get_error_message()];
+        }
+        
+        $http_status = wp_remote_retrieve_response_code($response);
+        $body = wp_remote_retrieve_body($response);
+        
+        nomreh_log("Test connection response: " . $body);
+        
+        return [
+            'success' => true,
+            'http_status' => $http_status,
+            'response' => $body
+        ];
     }
 } 

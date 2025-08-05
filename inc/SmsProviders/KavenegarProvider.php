@@ -81,4 +81,56 @@ class KavenegarProvider extends SmsProvider {
 
         wp_send_json_error(['message' => 'مشکلی در ارسال کد تایید بوجود آمده است.']);
     }
+    
+    /**
+     * Test method to debug API connection
+     */
+    public function test_connection() {
+        $token = get_option('nomreh_kavehnegar_token', '');
+        
+        if (empty($token)) {
+            return ['success' => false, 'message' => 'Token not configured'];
+        }
+        
+        // Test API endpoint - get account info
+        $api_url = 'https://api.kavenegar.com/v1/' . $token . '/account/info.json';
+        
+        $response = wp_remote_get($api_url, [
+            'timeout' => 30
+        ]);
+        
+        if (is_wp_error($response)) {
+            return ['success' => false, 'message' => 'Connection error: ' . $response->get_error_message()];
+        }
+        
+        $http_status = wp_remote_retrieve_response_code($response);
+        $body = wp_remote_retrieve_body($response);
+        
+        nomreh_log("Kavenegar test connection response: " . $body);
+        
+        if ($http_status == 200) {
+            $decoded_response = json_decode($body, true);
+            if (isset($decoded_response['return']) && $decoded_response['return']['status'] == 200) {
+                nomreh_log(print_r($decoded_response, true));
+                $account_info = $decoded_response['entries'] ?? [];
+                $credit = $account_info['remaincredit'] ?? 'Unknown';
+                $expire = $account_info['expiredate'] ?? 'Unknown';
+                
+                return [
+                    'success' => true,
+                    'http_status' => $http_status,
+                    'response' => "اتصال موفق - اعتبار: $credit - تاریخ انقضا: $expire"
+                ];
+            } else {
+                $error_message = $decoded_response['return']['message'] ?? 'Unknown error';
+                return ['success' => false, 'message' => 'API Error: ' . $error_message];
+            }
+        }
+        
+        return [
+            'success' => false,
+            'http_status' => $http_status,
+            'response' => $body
+        ];
+    }
 } 
