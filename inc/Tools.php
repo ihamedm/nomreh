@@ -8,6 +8,7 @@ class Tools{
 
     public function __construct(){
         add_action('wp_ajax_assign_users_to_orphan_orders', [$this, 'assign_users_to_orphan_orders_ajax_callback']);
+        add_action('wp_ajax_migrate_digits_users', [$this, 'migrate_digits_users_ajax_callback']);
 
     }
 
@@ -58,7 +59,7 @@ class Tools{
                     }
 
                     // Check if user exists
-                    $user = User::user_exist($billing_phone, $order->get_billing_email() );
+                    $user = User::user_exist($billing_phone, $order->get_billing_email());
 
                     if (!empty($user)) {
                         $log_messages[] = sprintf(
@@ -72,6 +73,8 @@ class Tools{
                         // Create new user
                         $user = Register::register_user(
                             $billing_phone,
+                            $order->get_billing_first_name(),
+                            $order->get_billing_last_name(),
                             $order->get_billing_email()
                         );
 
@@ -138,6 +141,72 @@ class Tools{
                 $execution_time,
                 $processed,
                 $errors
+            );
+
+            array_unshift($log_messages, $summary);
+
+            wp_send_json_success(implode('', $log_messages));
+
+        } catch (\Exception $e) {
+            wp_send_json_error(sprintf(
+                '<li class="error">%s</li>',
+                esc_html($e->getMessage())
+            ));
+        }
+    }
+
+    public function migrate_digits_users_ajax_callback() {
+        try {
+            // Verify nonce and user capabilities
+            if (!check_ajax_referer('nomreh_ajax_nonce', 'security', false)) {
+                throw new \Exception('بررسی امنیتی ناموفق بود');
+            }
+
+            if (!current_user_can('manage_options')) {
+                throw new \Exception('دسترسی کافی ندارید');
+            }
+
+            // Check if there are any users with Digits phone numbers
+            if (!\Nomreh\Utilities\DigitsIntegration::has_digits_users()) {
+                throw new \Exception('هیچ کاربری با شماره تلفن Digits یافت نشد');
+            }
+
+            $log_messages = [];
+            $step_start = microtime(true);
+
+            // Perform bulk migration
+            $results = \Nomreh\Utilities\DigitsIntegration::bulk_migrate_digits_users();
+
+            $execution_time = round(microtime(true) - $step_start, 4);
+
+            // Build log messages
+            if ($results['success'] > 0) {
+                $log_messages[] = sprintf(
+                    '<li class="success">%d کاربر با موفقیت از Digits به Nomreh مهاجرت شدند</li>',
+                    $results['success']
+                );
+            }
+
+            if ($results['failed'] > 0) {
+                $log_messages[] = sprintf(
+                    '<li class="error">مهاجرت %d کاربر ناموفق بود</li>',
+                    $results['failed']
+                );
+            }
+
+            if ($results['skipped'] > 0) {
+                $log_messages[] = sprintf(
+                    '<li class="info">%d کاربر رد شدند (قبلاً مهاجرت شده یا داده نامعتبر)</li>',
+                    $results['skipped']
+                );
+            }
+
+            $summary = sprintf(
+                '<li class="summary">مهاجرت در %s ثانیه تکمیل شد. موفق: %d، ناموفق: %d، رد شده: %d</li>',
+                $execution_time,
+                $results['success'],
+                $results['failed'],
+                $results['skipped']
             );
 
             array_unshift($log_messages, $summary);

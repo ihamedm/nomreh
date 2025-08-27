@@ -33,6 +33,7 @@ class Login {
         if ($otp_verification['success']) {
             // OTP code verified, attempt to log in the user
 
+            // Only check Nomreh's own user fields
             $user = User::user_exist($phone);
 
             // If no user was found, tell js to show register form

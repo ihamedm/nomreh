@@ -11,8 +11,8 @@ class Menu{
     public function add_submenu() {
         add_submenu_page(
             'options-general.php',
-            'Nomreh',
-            'Nomreh',
+            'نُمره',
+            'نُمره',
             'manage_options',
             'nomreh',
             [$this, 'page_content']
@@ -23,10 +23,11 @@ class Menu{
         $active_tab = $_GET['tab'] ?? 'settings';
         ?>
         <div class="wrap">
-            <h2>Nomreh</h2>
+            <h2>نُمره</h2>
 
             <h2 class="nav-tab-wrapper">
-                <a href="?page=nomreh&tab=settings" class="nav-tab <?php echo $active_tab === 'settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
+                <a href="?page=nomreh&tab=settings" class="nav-tab <?php echo $active_tab === 'settings' ? 'nav-tab-active' : ''; ?>">تنظیمات</a>
+                <a href="?page=nomreh&tab=tools" class="nav-tab <?php echo $active_tab === 'tools' ? 'nav-tab-active' : ''; ?>">ابزارها</a>
             </h2>
 
             <?php include_once dirname(__FILE__) . '/menu/'.$active_tab.'.php';?>
